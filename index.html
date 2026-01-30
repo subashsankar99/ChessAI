@@ -209,12 +209,14 @@
         .mode-indicator.hints-on { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
         .mode-indicator.hints-off { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
+        /* ========== NEW GREEN THEME BOARD STYLES ========== */
         .chess-board {
             display: grid;
             grid-template-columns: repeat(8, 55px);
             grid-template-rows: repeat(8, 55px);
-            border: 4px solid #e94560;
-            border-radius: 8px;
+            /* Dark grey border like the image */
+            border: 5px solid #2b2b2b; 
+            border-radius: 4px;
             overflow: hidden;
             box-shadow: 0 15px 50px rgba(0,0,0,0.5);
         }
@@ -230,19 +232,42 @@
             position: relative;
             transition: background 0.15s ease;
         }
-        .square.light { background: linear-gradient(135deg, #f0d9b5, #e8c99b); }
-        .square.dark { background: linear-gradient(135deg, #b58863, #996644); }
-        .square.selected { background: linear-gradient(135deg, #7dd87d, #4ade80) !important; }
+
+        /* Cream colored light squares */
+        .square.light { background: #eeeed2; }
+        
+        /* Green colored dark squares */
+        .square.dark { background: #769656; }
+        
+        /* Bright yellow/green selection */
+        .square.selected { background: #bbcb2b !important; }
+
+        /* Valid Move Dots - Subtle dark circles */
         .square.valid-move::after {
             content: '';
             position: absolute;
-            width: 14px; height: 14px;
-            background: rgba(0, 200, 0, 0.6);
+            width: 18px; height: 18px;
+            background: rgba(0, 0, 0, 0.15);
             border-radius: 50%;
         }
-        .square.valid-capture { background: linear-gradient(135deg, #ff6b6b, #dc2626) !important; }
-        .square.last-move { box-shadow: inset 0 0 10px rgba(255, 200, 0, 0.6); }
-        .square.in-check { background: linear-gradient(135deg, #ff0000, #aa0000) !important; }
+
+        /* Valid Capture - Ring */
+        .square.valid-capture { background: inherit !important; }
+        .square.valid-capture::after {
+            content: '';
+            position: absolute;
+            width: 55px; height: 55px;
+            border: 5px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0;
+            background: transparent;
+        }
+
+        /* Last Move Highlight - Transparent Yellow */
+        .square.last-move { background: rgba(255, 255, 51, 0.5) !important; box-shadow: none; }
+        
+        /* Check - Red Gradient */
+        .square.in-check { background: radial-gradient(circle, #ff6b6b 0%, transparent 80%) !important; }
+        
         .square:hover { filter: brightness(1.1); }
         
         .square.wrong-move {
@@ -573,12 +598,13 @@
                 <div class="chat-box"><p class="ai-msg" id="aiMsg">Ready to play! Make your move. ♟️</p></div>
                 <div class="thinking" id="thinking"><span>Thinking</span><div class="dots"><span></span><span></span><span></span></div></div>
                 <div class="turn-display white-turn" id="turnDisplay">Your Turn ⚪</div>
+                
+                <!-- MODIFIED STATS GRID: Removed You and AI Cards -->
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-label">You</div><div class="stat-value" id="playerMat">0</div></div>
-                    <div class="stat-card"><div class="stat-label">AI</div><div class="stat-value" id="aiMat">0</div></div>
                     <div class="stat-card"><div class="stat-label">Move</div><div class="stat-value" id="moveNum">0</div></div>
                     <div class="stat-card"><div class="stat-label">Win</div><div class="stat-value" id="winPts">+20</div></div>
                 </div>
+
                 <div class="action-btns">
                     <button class="action-btn new-btn" onclick="newGame()">🔄 New</button>
                     <button class="action-btn resign-btn" onclick="resign()">🏳️ Resign</button>
@@ -1071,8 +1097,7 @@
 
         function updateStats(){
             document.getElementById('moveNum').textContent=Math.ceil(moves/2);
-            document.getElementById('playerMat').textContent=calcMat(pCaps);
-            document.getElementById('aiMat').textContent=calcMat(aCaps);
+            // Removed playerMat and aiMat updates here
             document.getElementById('pCaps').textContent=pCaps.map(p=>SYM[p]).join('');
             document.getElementById('aCaps').textContent=aCaps.map(p=>SYM[p]).join('');
         }
